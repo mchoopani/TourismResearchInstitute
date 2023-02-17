@@ -10,6 +10,10 @@ from django.shortcuts import render
 
 from .serializers import Utils
 
+# temp
+class Home(views.View):
+    def get(self, request):
+        return render(request, 'index.html')
 
 class BookView(views.View):
 

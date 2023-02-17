@@ -1,6 +1,6 @@
 from django.db import models
-from core.choices import *
-from core.serializers import Dictable
+from apps.core.choices import *
+from apps.core.serializers import Dictable
 from multiselectfield import MultiSelectField
 
 
