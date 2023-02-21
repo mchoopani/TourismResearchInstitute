@@ -81,3 +81,4 @@ class BookView(views.View):
             data={},
             status=http.HTTPStatus.OK
         )
+
