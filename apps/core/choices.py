@@ -28,7 +28,13 @@ paper_research_group_choices = (
     ('tp', 'توسعه پایدار شهری'),
 )
 
+
 paper_specialized_field_choices = (
+    (0, 'گردشگری'),
+    (1, 'توسعه'),
+    (2, 'زیارت'),
+)
+event_specialized_field_choices = (
     (0, 'گردشگری'),
     (1, 'توسعه'),
     (2, 'زیارت'),
@@ -47,3 +53,7 @@ paper_type_choices = (
     (9, 'انگلیسی - با نمایه - با ضریب تاثیر - q4')
 )
 
+event_type_choices = (
+    (0, 'نشست'),
+    (1, 'کارگاه'),
+)

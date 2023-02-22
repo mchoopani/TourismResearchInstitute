@@ -4,8 +4,8 @@ import json
 from django import views
 from django.http import JsonResponse
 
-from .forms import BookForm,PaperForm
-from .models import Book,Paper
+from .forms import BookForm,PaperForm,EventForm
+from .models import Book,Paper,Event
 from django.shortcuts import render
 
 from .serializers import Utils
@@ -144,6 +144,73 @@ class PaperView(views.View):
         except Paper.DoesNotExist:
             return JsonResponse(data={}, status=http.HTTPStatus.NOT_FOUND)
         paper.delete()
+        return JsonResponse(
+            data={},
+            status=http.HTTPStatus.OK
+        )
+
+
+class EventView(views.View):
+    def get(self, request, event_id=None):
+        if event_id is None:
+            search_query = request.GET.get('q', None)
+            event_list = Event.get_event_list(search_query)
+            return JsonResponse(
+                data=Utils.serialize_array(event_list),
+                status=http.HTTPStatus.OK,
+                safe=False
+            )
+        else:
+            try:
+                event = Event.get_event_by_id(id=event_id)
+            except Event.DoesNotExist:
+                return JsonResponse(data={}, status=http.HTTPStatus.NOT_FOUND)
+            return JsonResponse(
+                data=event.to_dict(),
+                status=http.HTTPStatus.OK
+            )
+
+    def post(self, request):
+        data = json.loads(request.body.decode('utf-8'))
+        form = EventForm(data)
+        if form.is_valid():
+            form.save()
+            return JsonResponse(
+                data={},
+                status=http.HTTPStatus.CREATED
+            )
+        else:
+            return JsonResponse(
+                data=form.errors,
+                status=http.HTTPStatus.BAD_REQUEST
+            )
+
+    def put(self, request, event_id):
+        try:
+            event = Event.get_event_by_id(id=event_id)
+            data = json.loads(request.body.decode('utf-8'))
+            form = EventForm(data, instance=event)
+            if form.is_valid():
+                form.save()
+                return JsonResponse(
+                    data={},
+                    status=http.HTTPStatus.OK
+                )
+            else:
+                return JsonResponse(
+                    data=form.errors,
+                    status=http.HTTPStatus.BAD_REQUEST
+                )
+
+        except Event.DoesNotExist:
+            return JsonResponse(data={}, status=http.HTTPStatus.NOT_FOUND)
+
+    def delete(self, request, event_id):
+        try:
+            event = Event.get_event_by_id(id=event_id)
+        except Event.DoesNotExist:
+            return JsonResponse(data={}, status=http.HTTPStatus.NOT_FOUND)
+        event.delete()
         return JsonResponse(
             data={},
             status=http.HTTPStatus.OK

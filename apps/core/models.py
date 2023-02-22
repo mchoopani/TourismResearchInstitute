@@ -53,6 +53,7 @@ class Paper(models.Model, Dictable):
     first_author = models.CharField(max_length=256)
     co_authors = models.CharField(max_length=256)
     type = models.IntegerField(default=0, choices=paper_type_choices)
+
     def to_dict(self):
         return {
             "title": self.title,
@@ -66,7 +67,7 @@ class Paper(models.Model, Dictable):
             "publish_number": self.publish_number,
             "specialized_field": self.specialized_field,
             "research_group": self.research_group,
-            "type" : self.type
+            "type": self.type
         }
 
     @staticmethod
@@ -79,3 +80,41 @@ class Paper(models.Model, Dictable):
     def get_paper_by_id(id):
         return Paper.objects.get(id=id)
 
+
+class Event(models.Model, Dictable):
+    title = models.CharField(max_length=256, null=False)
+    date = models.DateField()
+    research_group = MultiSelectField(max_length=3, choices=research_group_choices)
+    specialized_field = models.IntegerField(default=0, choices=event_specialized_field_choices)
+    file = models.FileField(null=True)
+
+    type = models.IntegerField(default=0, choices=event_type_choices)
+
+    instructor = models.CharField(max_length=256, null=True)
+
+    speaker = models.CharField(max_length=256, null=True)
+    scientific_director = models.CharField(max_length=256, null=True)
+    executive_director = models.CharField(max_length=256, null=True)
+
+    def to_dict(self):
+        return {
+            "title": self.title,
+            "date": self.date,
+            "specialized_field": self.specialized_field,
+            "research_group": self.research_group,
+            "instructor": self.instructor,
+            "scientific_director": self.scientific_director,
+            "executive_director": self.executive_director,
+            "speaker": self.speaker,
+            # "file": self.file.url,
+        }
+
+    @staticmethod
+    def get_event_list(search_query=None):
+        if search_query is None:
+            return [event for event in Event.objects.all()]
+        return [event for event in Event.objects.filter(title__contains=search_query)]
+
+    @staticmethod
+    def get_event_by_id(id):
+        return Event.objects.get(id=id)

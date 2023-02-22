@@ -1,5 +1,5 @@
 from django import forms
-from apps.core.models import Book,Paper
+from apps.core.models import Book,Paper,Event
 
 
 class BookForm(forms.ModelForm):
@@ -13,3 +13,8 @@ class PaperForm(forms.ModelForm):
         model = Paper
         fields = "__all__"
 
+class EventForm(forms.ModelForm):
+    file = forms.FileField(required=False)
+    class Meta:
+        model = Event
+        fields = "__all__"
