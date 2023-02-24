@@ -2,18 +2,21 @@ import http
 import json
 
 from django import views
+from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 
-from .forms import BookForm,PaperForm,EventForm
-from .models import Book,Paper,Event
+from .forms import BookForm, PaperForm, EventForm, ContractForm
+from .models import Book, Paper, Event, Contract
 from django.shortcuts import render
 
 from .serializers import Utils
+
 
 # temp
 class Home(views.View):
     def get(self, request):
         return render(request, 'index.html')
+
 
 class BookView(views.View):
 
@@ -81,7 +84,6 @@ class BookView(views.View):
             data={},
             status=http.HTTPStatus.OK
         )
-
 
 class PaperView(views.View):
     def get(self, request, paper_id=None):
@@ -215,4 +217,3 @@ class EventView(views.View):
             data={},
             status=http.HTTPStatus.OK
         )
-

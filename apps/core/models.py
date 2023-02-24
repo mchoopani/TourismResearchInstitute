@@ -118,3 +118,40 @@ class Event(models.Model, Dictable):
     @staticmethod
     def get_event_by_id(id):
         return Event.objects.get(id=id)
+
+
+class Contract(models.Model, Dictable):
+    title = models.CharField(max_length=256, null=False)
+    start_date = models.DateField()
+    end_date = models.DateField()
+    manager = models.CharField(max_length=256, null=False)
+    amount = models.IntegerField()
+    cooperators = models.CharField(max_length=256)
+    document1 = models.FileField(null=True)
+    document2 = models.FileField(null=True)
+    document3 = models.FileField(null=True)
+    document4 = models.FileField(null=True)
+
+    def to_dict(self):
+        return {
+            "title": self.title,
+            "start_date": self.start_date,
+            "end_date": self.end_date,
+            "manager": self.manager,
+            "amount": self.amount,
+            "cooperators": self.cooperators,
+            "document1": self.document1,
+            "document2": self.document2,
+            "document3": self.document3,
+            "document4": self.document4,
+        }
+
+    @staticmethod
+    def get_contract_list(search_query=None):
+        if search_query is None:
+            return [contract for contract in Contract.objects.all()]
+        return [contract for contract in Contract.objects.filter(title__contains=search_query)]
+
+    @staticmethod
+    def get_contract_by_id(id):
+        return Contract.objects.get(id=id)
