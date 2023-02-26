@@ -25,7 +25,7 @@ class Book(models.Model, Dictable):
             "book_type": self.book_type,
             "research_group": self.research_group,
             "ISBN": self.ISBN,
-            # "file": self.file.url,
+            "file": self.file.url,
         }
 
     @staticmethod
@@ -155,3 +155,68 @@ class Contract(models.Model, Dictable):
     @staticmethod
     def get_contract_by_id(id):
         return Contract.objects.get(id=id)
+
+
+class Plan(models.Model, Dictable):
+    title = models.CharField(max_length=256, null=False)
+    responsible_member = models.CharField(max_length=256, null=False)
+    expiration_date = models.CharField(max_length=256, null=False)
+
+    start_date = models.DateField()
+    end_date = models.DateField()
+
+    duration = models.CharField(max_length=256, null=False)
+    amount = models.PositiveBigIntegerField()
+    cooperators = models.CharField(max_length=512)
+    specialized_field = models.IntegerField(default=0, choices=specialized_field_choices)
+    research_group = MultiSelectField(max_length=32, choices=research_group_choices)
+
+    def to_dict(self):
+        return {
+            "title": self.title,
+            "responsible_member": self.responsible_member,
+            "expiration_date": self.expiration_date,
+            "start_date": self.start_date,
+            "end_date": self.end_date,
+            "duration": self.duration,
+            "amount": self.amount,
+            "cooperators": self.cooperators,
+            "specialized_field": self.specialized_field,
+            "research_group": self.research_group,
+        }
+
+    @staticmethod
+    def get_plan_list(search_query=None):
+        if search_query is None:
+            return [plan for plan in Plan.objects.all()]
+        return [plan for plan in Plan.objects.filter(title__contains=search_query)]
+
+    @staticmethod
+    def get_plan_by_id(id):
+        return Plan.objects.get(id=id)
+
+
+class Document(models.Model):
+    title = models.CharField(max_length=256, null=False)
+    file = models.FileField()
+    plan = models.ForeignKey(Plan, on_delete=models.CASCADE)
+
+
+class PlanApplication(models.Model):
+    income = models.PositiveBigIntegerField()
+    total_income = models.PositiveBigIntegerField()
+    total_cost = models.PositiveBigIntegerField()
+    plan = models.OneToOneField(Plan)
+
+
+class CostTopic(models.Model):
+    title = models.CharField(max_length=256, null=False)
+    amount = models.PositiveBigIntegerField()
+    plan_application = models.ForeignKey(PlanApplication, on_delete=models.CASCADE)
+
+
+class CostSection(models.Model):
+    title = models.CharField(max_length=256, null=False)
+    amount = models.PositiveBigIntegerField()
+    description = models.TextField(max_length=1024)
+    topic = models.ForeignKey(CostTopic, on_delete=models.CASCADE)

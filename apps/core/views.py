@@ -5,11 +5,82 @@ from django import views
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 
-from .forms import BookForm, PaperForm, EventForm, ContractForm
-from .models import Book, Paper, Event, Contract
+from .forms import BookForm, PaperForm, EventForm, ContractForm , PlanForm , PlanApplicationForm , DocumentForm , CostTopicForm , CostSectionForm
+from .models import Book, Paper, Event, Contract , Plan , PlanApplication ,  Document, CostTopic, CostSection
 from django.shortcuts import render
 
 from .serializers import Utils
+
+
+
+class PlanView(views.View):
+    def get(self, request, plan_id=None):
+        if plan_id is None:
+            search_query = request.GET.get('q', None)
+            plan_list = Plan.get_plan_list(search_query)
+            return JsonResponse(
+                data=Utils.serialize_array(plan_list),
+                status=http.HTTPStatus.OK,
+                safe=False
+            )
+        else:
+            try:
+                plan = Plan.get_plan_by_id(id=plan_id)
+            except Plan.DoesNotExist:
+                return JsonResponse(data={}, status=http.HTTPStatus.NOT_FOUND)
+            return JsonResponse(
+                data=plan.to_dict(),
+                status=http.HTTPStatus.OK
+            )
+
+    def post(self, request):
+        data = json.loads(request.body.decode('utf-8'))
+        form = PlanForm(data)
+        if form.is_valid():
+            form.save()
+            return JsonResponse(
+                data={},
+                status=http.HTTPStatus.CREATED
+            )
+        else:
+            return JsonResponse(
+                data=form.errors,
+                status=http.HTTPStatus.BAD_REQUEST
+            )
+
+    def put(self, request, plan_id):
+        try:
+            plan = Plan.get_plan_by_id(id=plan_id)
+            data = json.loads(request.body.decode('utf-8'))
+            form = PlanForm(data, instance=plan)
+            if form.is_valid():
+                form.save()
+                return JsonResponse(
+                    data={},
+                    status=http.HTTPStatus.OK
+                )
+            else:
+                return JsonResponse(
+                    data=form.errors,
+                    status=http.HTTPStatus.BAD_REQUEST
+                )
+
+        except Plan.DoesNotExist:
+            return JsonResponse(data={}, status=http.HTTPStatus.NOT_FOUND)
+
+    def delete(self, request, plan_id):
+        try:
+            plan = Plan.get_plan_by_id(id=plan_id)
+        except Plan.DoesNotExist:
+            return JsonResponse(data={}, status=http.HTTPStatus.NOT_FOUND)
+        plan.delete()
+        return JsonResponse(
+            data={},
+            status=http.HTTPStatus.OK
+        )
+
+
+
 
 
 # temp
@@ -41,7 +112,7 @@ class BookView(views.View):
 
     def post(self, request):
         data = json.loads(request.body.decode('utf-8'))
-        form = BookForm(data)
+        form = BookForm(data, request.FILES)
         if form.is_valid():
             form.save()
             return JsonResponse(
@@ -84,6 +155,7 @@ class BookView(views.View):
             data={},
             status=http.HTTPStatus.OK
         )
+
 
 class PaperView(views.View):
     def get(self, request, paper_id=None):
