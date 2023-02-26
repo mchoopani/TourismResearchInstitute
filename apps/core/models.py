@@ -235,10 +235,22 @@ class PlanApplication(models.Model, Dictable):
         return [topic for topic in self.costtopic_set.all()]
 
 
-class CostTopic(models.Model):
+class CostTopic(models.Model, Dictable):
     title = models.CharField(max_length=256, null=False)
     amount = models.PositiveBigIntegerField()
     plan_application = models.ForeignKey(PlanApplication, on_delete=models.CASCADE)
+
+    def to_dict(self):
+        return {
+            "title": self.title,
+            "amount": self.amount,
+        }
+
+    def get_section_set(self):
+        return [sec for sec in self.costsection_set.all()]
+    @staticmethod
+    def get_topic_by_id(id):
+        return CostTopic.objects.get(id=id)
 
 
 class CostSection(models.Model):
@@ -246,3 +258,13 @@ class CostSection(models.Model):
     amount = models.PositiveBigIntegerField()
     description = models.TextField(max_length=1024)
     topic = models.ForeignKey(CostTopic, on_delete=models.CASCADE)
+
+    def to_dict(self):
+        return {
+            "title": self.title,
+            "amount": self.amount,
+            "description": self.description,
+        }
+    @staticmethod
+    def get_section_by_id(id):
+        return CostSection.objects.get(id=id)

@@ -80,7 +80,6 @@ class PlanView(views.View):
         )
 
 
-
 class DocumentView(views.View):
     def get(self, request, plan_id, document_id=None):
         if document_id is None:
@@ -118,7 +117,7 @@ class DocumentView(views.View):
 
     def put(self, request, document_id):
         try:
-            document = Document.getdocument_by_id(id=document_id)
+            document = Document.get_document_by_id(id=document_id)
             data = json.loads(request.body.decode('utf-8'))
             form = DocumentForm(data, instance=document)
             if form.is_valid():
@@ -148,7 +147,190 @@ class DocumentView(views.View):
         )
 
 
+class ApplicationView(views.View):
+    def get(self, request, plan_id):
+        plan = Plan.get_plan_by_id(plan_id)
+        application = plan.application
+        if application is None:
+            return JsonResponse(data={}, status=http.HTTPStatus.NOT_FOUND)
+        else:
+            return JsonResponse(
+                data=application.to_dict(),
+                status=http.HTTPStatus.OK
+            )
 
+    def post(self, request):
+        data = json.loads(request.body.decode('utf-8'))
+        form = PlanApplicationForm(data)
+        if form.is_valid():
+            form.save()
+            return JsonResponse(
+                data={},
+                status=http.HTTPStatus.CREATED
+            )
+        else:
+            return JsonResponse(
+                data=form.errors,
+                status=http.HTTPStatus.BAD_REQUEST
+            )
+
+    def put(self, request, plan_id):
+        try:
+            plan = Plan.get_plan_by_id(id=plan_id)
+            data = json.loads(request.body.decode('utf-8'))
+            form = PlanApplicationForm(data, instance=plan.application)
+            if form.is_valid():
+                form.save()
+                return JsonResponse(
+                    data={},
+                    status=http.HTTPStatus.OK
+                )
+            else:
+                return JsonResponse(
+                    data=form.errors,
+                    status=http.HTTPStatus.BAD_REQUEST
+                )
+
+        except PlanApplication.DoesNotExist:
+            return JsonResponse(data={}, status=http.HTTPStatus.NOT_FOUND)
+
+
+
+
+
+class CostSectionView(views.View):
+    def get(self, request, topic_id, section_id=None):
+        if section_id is None:
+            topic = CostTopic.get_topic_by_id(topic_id)
+            section_list = topic.get_topic_set()
+            return JsonResponse(
+                data=Utils.serialize_array(section_list),
+                status=http.HTTPStatus.OK,
+                safe=False
+            )
+        else:
+            try:
+                section = CostSection.get_section_by_id(id=section_id)
+            except CostSection.DoesNotExist:
+                return JsonResponse(data={}, status=http.HTTPStatus.NOT_FOUND)
+            return JsonResponse(
+                data=section.to_dict(),
+                status=http.HTTPStatus.OK
+            )
+
+    def post(self, request):
+        data = json.loads(request.body.decode('utf-8'))
+        form = CostSectionForm(data)
+        if form.is_valid():
+            form.save()
+            return JsonResponse(
+                data={},
+                status=http.HTTPStatus.CREATED
+            )
+        else:
+            return JsonResponse(
+                data=form.errors,
+                status=http.HTTPStatus.BAD_REQUEST
+            )
+
+    def put(self, request, section_id):
+        try:
+            section = CostSection.get_section_by_id(id=section_id)
+            data = json.loads(request.body.decode('utf-8'))
+            form = CostSectionForm(data, instance=section)
+            if form.is_valid():
+                form.save()
+                return JsonResponse(
+                    data={},
+                    status=http.HTTPStatus.OK
+                )
+            else:
+                return JsonResponse(
+                    data=form.errors,
+                    status=http.HTTPStatus.BAD_REQUEST
+                )
+
+        except CostSection.DoesNotExist:
+            return JsonResponse(data={}, status=http.HTTPStatus.NOT_FOUND)
+
+    def delete(self, request, section_id):
+        try:
+            section = CostSection.get_section_by_id(id=section_id)
+        except CostSection.DoesNotExist:
+            return JsonResponse(data={}, status=http.HTTPStatus.NOT_FOUND)
+        section.delete()
+        return JsonResponse(
+            data={},
+            status=http.HTTPStatus.OK
+        )
+
+
+class TopicView(views.View):
+    def get(self, request, plan_id, topic_id=None):
+        if topic_id is None:
+            plan = Plan.get_plan_by_id(plan_id)
+            application = plan.application
+            topic_list = application.get_topic_set()
+            return JsonResponse(
+                data=Utils.serialize_array(topic_list),
+                status=http.HTTPStatus.OK,
+                safe=False
+            )
+        else:
+            try:
+                topic = CostTopic.get_topic_by_id(id=topic_id)
+            except CostTopic.DoesNotExist:
+                return JsonResponse(data={}, status=http.HTTPStatus.NOT_FOUND)
+            return JsonResponse(
+                data=topic.to_dict(),
+                status=http.HTTPStatus.OK
+            )
+
+    def post(self, request):
+        data = json.loads(request.body.decode('utf-8'))
+        form = CostTopicForm(data)
+        if form.is_valid():
+            form.save()
+            return JsonResponse(
+                data={},
+                status=http.HTTPStatus.CREATED
+            )
+        else:
+            return JsonResponse(
+                data=form.errors,
+                status=http.HTTPStatus.BAD_REQUEST
+            )
+
+    def put(self, request, topic_id):
+        try:
+            topic = CostTopic.get_topic_by_id(id=topic_id)
+            data = json.loads(request.body.decode('utf-8'))
+            form = CostTopicForm(data, instance=topic)
+            if form.is_valid():
+                form.save()
+                return JsonResponse(
+                    data={},
+                    status=http.HTTPStatus.OK
+                )
+            else:
+                return JsonResponse(
+                    data=form.errors,
+                    status=http.HTTPStatus.BAD_REQUEST
+                )
+
+        except CostTopic.DoesNotExist:
+            return JsonResponse(data={}, status=http.HTTPStatus.NOT_FOUND)
+
+    def delete(self, request, topic_id):
+        try:
+            topic = CostTopic.get_topic_by_id(id=topic_id)
+        except CostTopic.DoesNotExist:
+            return JsonResponse(data={}, status=http.HTTPStatus.NOT_FOUND)
+        topic.delete()
+        return JsonResponse(
+            data={},
+            status=http.HTTPStatus.OK
+        )
 
 
 # temp
