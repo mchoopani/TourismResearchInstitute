@@ -195,18 +195,44 @@ class Plan(models.Model, Dictable):
     def get_plan_by_id(id):
         return Plan.objects.get(id=id)
 
+    def get_document_set(self):
+        return [doc for doc in self.document_set.all()]
 
-class Document(models.Model):
+    def get_application(self):
+        return self.application
+
+
+class Document(models.Model, Dictable):
     title = models.CharField(max_length=256, null=False)
     file = models.FileField()
     plan = models.ForeignKey(Plan, on_delete=models.CASCADE)
 
+    def to_dict(self):
+        return {
+            "title": self.title,
+            "file": self.file.url
+        }
 
-class PlanApplication(models.Model):
+    @staticmethod
+    def get_document_by_id(id):
+        return Document.objects.get(id=id)
+
+
+class PlanApplication(models.Model, Dictable):
     income = models.PositiveBigIntegerField()
     total_income = models.PositiveBigIntegerField()
     total_cost = models.PositiveBigIntegerField()
-    plan = models.OneToOneField(Plan)
+    plan = models.OneToOneField(Plan, related_name='application')
+
+    def to_dict(self):
+        return {
+            "income": self.income,
+            "total_income": self.total_income,
+            "total_cost": self.total_cost,
+        }
+
+    def get_topic_set(self):
+        return [topic for topic in self.costtopic_set.all()]
 
 
 class CostTopic(models.Model):

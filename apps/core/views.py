@@ -5,12 +5,12 @@ from django import views
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 
-from .forms import BookForm, PaperForm, EventForm, ContractForm , PlanForm , PlanApplicationForm , DocumentForm , CostTopicForm , CostSectionForm
-from .models import Book, Paper, Event, Contract , Plan , PlanApplication ,  Document, CostTopic, CostSection
+from .forms import BookForm, PaperForm, EventForm, ContractForm, PlanForm, PlanApplicationForm, DocumentForm, \
+    CostTopicForm, CostSectionForm
+from .models import Book, Paper, Event, Contract, Plan, PlanApplication, Document, CostTopic, CostSection
 from django.shortcuts import render
 
 from .serializers import Utils
-
 
 
 class PlanView(views.View):
@@ -74,6 +74,74 @@ class PlanView(views.View):
         except Plan.DoesNotExist:
             return JsonResponse(data={}, status=http.HTTPStatus.NOT_FOUND)
         plan.delete()
+        return JsonResponse(
+            data={},
+            status=http.HTTPStatus.OK
+        )
+
+
+
+class DocumentView(views.View):
+    def get(self, request, plan_id, document_id=None):
+        if document_id is None:
+            plan = Plan.get_plan_by_id(plan_id)
+            document_list = plan.get_document_set()
+            return JsonResponse(
+                data=Utils.serialize_array(document_list),
+                status=http.HTTPStatus.OK,
+                safe=False
+            )
+        else:
+            try:
+                document = Document.get_document_by_id(id=document_id)
+            except Plan.DoesNotExist:
+                return JsonResponse(data={}, status=http.HTTPStatus.NOT_FOUND)
+            return JsonResponse(
+                data=document.to_dict(),
+                status=http.HTTPStatus.OK
+            )
+
+    def post(self, request):
+        data = json.loads(request.body.decode('utf-8'))
+        form = DocumentForm(data)
+        if form.is_valid():
+            form.save()
+            return JsonResponse(
+                data={},
+                status=http.HTTPStatus.CREATED
+            )
+        else:
+            return JsonResponse(
+                data=form.errors,
+                status=http.HTTPStatus.BAD_REQUEST
+            )
+
+    def put(self, request, document_id):
+        try:
+            document = Document.getdocument_by_id(id=document_id)
+            data = json.loads(request.body.decode('utf-8'))
+            form = DocumentForm(data, instance=document)
+            if form.is_valid():
+                form.save()
+                return JsonResponse(
+                    data={},
+                    status=http.HTTPStatus.OK
+                )
+            else:
+                return JsonResponse(
+                    data=form.errors,
+                    status=http.HTTPStatus.BAD_REQUEST
+                )
+
+        except Document.DoesNotExist:
+            return JsonResponse(data={}, status=http.HTTPStatus.NOT_FOUND)
+
+    def delete(self, request, document_id):
+        try:
+            document = Document.get_document_by_id(id=document_id)
+        except Document.DoesNotExist:
+            return JsonResponse(data={}, status=http.HTTPStatus.NOT_FOUND)
+        document.delete()
         return JsonResponse(
             data={},
             status=http.HTTPStatus.OK
