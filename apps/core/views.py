@@ -361,8 +361,9 @@ class BookView(views.View):
             )
 
     def post(self, request):
-        data = json.loads(request.body.decode('utf-8'))
-        form = BookForm(data, request.FILES)
+        #data = json.loads(request.body.decode('utf-8'))
+        data = request.POST
+        form = BookForm(data , request.FILES)
         if form.is_valid():
             form.save()
             return JsonResponse(
@@ -378,7 +379,8 @@ class BookView(views.View):
     def put(self, request, book_id):
         try:
             book = Book.get_book_by_id(id=book_id)
-            data = json.loads(request.body.decode('utf-8'))
+            #data = json.loads(request.body.decode('utf-8'))
+            data = request.POST
             form = BookForm(data, instance=book)
             if form.is_valid():
                 form.save()
@@ -389,7 +391,7 @@ class BookView(views.View):
             else:
                 return JsonResponse(
                     data=form.errors,
-                    status=http.HTTPStatus.BAD_REQUEST
+                    status=http.HTTPStatus.BAD_REQUEST,
                 )
 
         except Book.DoesNotExist:
@@ -428,7 +430,8 @@ class PaperView(views.View):
             )
 
     def post(self, request):
-        data = json.loads(request.body.decode('utf-8'))
+        #data = json.loads(request.body.decode('utf-8'))
+        data = request.POST
         form = PaperForm(data)
         if form.is_valid():
             form.save()
@@ -445,7 +448,8 @@ class PaperView(views.View):
     def put(self, request, paper_id):
         try:
             paper = Paper.get_paper_by_id(id=paper_id)
-            data = json.loads(request.body.decode('utf-8'))
+            #data = json.loads(request.body.decode('utf-8'))
+            data = request.POST
             form = PaperForm(data, instance=paper)
             if form.is_valid():
                 form.save()
@@ -495,7 +499,8 @@ class EventView(views.View):
             )
 
     def post(self, request):
-        data = json.loads(request.body.decode('utf-8'))
+        #data = json.loads(request.body.decode('utf-8'))
+        data = request.POST
         form = EventForm(data)
         if form.is_valid():
             form.save()
@@ -512,7 +517,8 @@ class EventView(views.View):
     def put(self, request, event_id):
         try:
             event = Event.get_event_by_id(id=event_id)
-            data = json.loads(request.body.decode('utf-8'))
+            #data = json.loads(request.body.decode('utf-8'))
+            data = request.POST
             form = EventForm(data, instance=event)
             if form.is_valid():
                 form.save()

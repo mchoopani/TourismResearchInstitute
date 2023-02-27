@@ -1,7 +1,7 @@
 specialized_field_choices = (
     (0, 'گردشگری'),
     (1, 'توسعه'),
-    (2, 'تجارت'),
+    (2, 'زیارت'),
 )
 book_type_choices = (
     (0, 'تألیف'),

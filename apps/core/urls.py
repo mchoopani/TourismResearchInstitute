@@ -8,6 +8,12 @@ urlpatterns = [
     path('books/<int:book_id>', csrf_exempt(BookView.as_view())),
     path('books/', csrf_exempt(BookView.as_view())),
 
+    path('papers/<int:paper_id>', csrf_exempt(PaperView.as_view())),
+    path('papers/', csrf_exempt(PaperView.as_view())),
+
+    path('events/<int:event_id>', csrf_exempt(EventView.as_view())),
+    path('events/', csrf_exempt(EventView.as_view())),
+
     path('plans/<int:plan_id>/application/topic/<int:topic_id>/section/<int:section_id>/', csrf_exempt(CostSectionView.as_view())),
     path('plans/<int:plan_id>/application/topic/<int:topic_id>/section/', csrf_exempt(CostSectionView.as_view())),
     path('plans/<int:plan_id>/application/topic/<int:topic_id>/', csrf_exempt(TopicView.as_view())),
@@ -17,6 +23,7 @@ urlpatterns = [
     path('plans/<int:plan_id>/documents/', csrf_exempt(DocumentView.as_view())),
     path('plans/<int:plan_id>/', csrf_exempt(PlanView.as_view())),
     path('plans/', csrf_exempt(PlanView.as_view())),
+
 
     path('', csrf_exempt(Home.as_view()))
 ]

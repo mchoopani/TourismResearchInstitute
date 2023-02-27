@@ -5,15 +5,17 @@ from multiselectfield import MultiSelectField
 
 
 class Book(models.Model, Dictable):
-    title = models.CharField(max_length=256, null=False)
-    year = models.IntegerField(null=False)
-    publisher = models.CharField(max_length=128, null=False)
+    title = models.CharField(max_length=256)
+    year = models.IntegerField()
+    publisher = models.CharField(max_length=128)
     writers = models.CharField(max_length=256)
     specialized_field = models.IntegerField(default=0, choices=specialized_field_choices)
     book_type = models.IntegerField(default=0, choices=book_type_choices)
-    research_group = MultiSelectField(max_length=3, choices=research_group_choices)
-    ISBN = models.CharField(max_length=15, null=True)
-    file = models.FileField(null=True)
+    research_group = MultiSelectField(choices=research_group_choices,max_length=32)
+    ISBN = models.CharField(max_length=15)
+    file = models.FileField()
+    created_on = models.DateTimeField(auto_now_add=True)
+
 
     def to_dict(self):
         return {
@@ -26,33 +28,42 @@ class Book(models.Model, Dictable):
             "research_group": self.research_group,
             "ISBN": self.ISBN,
             "file": self.file.url,
+            "created_on": self.created_on,
+            "id": self.id,
         }
 
     @staticmethod
     def get_book_list(search_query=None):
         if search_query is None:
             return [book for book in Book.objects.all()]
-        return [book for book in Book.objects.filter(title__contains=search_query)]
+        return [book for book in Book.objects.filter(title__icontains=search_query)]
 
     @staticmethod
     def get_book_by_id(id):
         return Book.objects.get(id=id)
 
 
+
+
+
 class Paper(models.Model, Dictable):
-    title = models.CharField(max_length=256, null=False)
-    year = models.IntegerField(null=False)
-    publisher = models.CharField(max_length=128, null=False)
+
+    title = models.CharField(max_length=256)
+    year = models.IntegerField()
+    publisher = models.CharField(max_length=128)
     link = models.URLField(max_length=256)
     season = models.IntegerField(default=0, choices=season_choices)
-    publish_number = models.IntegerField(null=False)
-    research_group = MultiSelectField(max_length=3, choices=paper_research_group_choices)
-    specialized_field = models.IntegerField(default=0, choices=paper_specialized_field_choices)
+    publish_number = models.IntegerField()
 
-    corresponding_author = models.CharField(max_length=256)
-    first_author = models.CharField(max_length=256)
-    co_authors = models.CharField(max_length=256)
+    research_group = MultiSelectField(max_length=3, choices=research_group_choices)
+    specialized_field = models.IntegerField(default=0, choices=specialized_field_choices)
+
+    corresponding_author = models.CharField(max_length=128)
+    first_author = models.CharField(max_length=128)
+    co_authors = models.CharField(max_length=128)
     type = models.IntegerField(default=0, choices=paper_type_choices)
+    created_on = models.DateTimeField(auto_now_add=True)
+
 
     def to_dict(self):
         return {
@@ -67,14 +78,16 @@ class Paper(models.Model, Dictable):
             "publish_number": self.publish_number,
             "specialized_field": self.specialized_field,
             "research_group": self.research_group,
-            "type": self.type
+            "type": self.type,
+            "created_on": self.created_on,
+            "id": self.id
         }
 
     @staticmethod
     def get_paper_list(search_query=None):
         if search_query is None:
             return [paper for paper in Paper.objects.all()]
-        return [paper for paper in Paper.objects.filter(title__contains=search_query)]
+        return [paper for paper in Paper.objects.filter(title__icontains=search_query)]
 
     @staticmethod
     def get_paper_by_id(id):
@@ -82,19 +95,20 @@ class Paper(models.Model, Dictable):
 
 
 class Event(models.Model, Dictable):
-    title = models.CharField(max_length=256, null=False)
+    title = models.CharField(max_length=256)
     date = models.DateField()
-    research_group = MultiSelectField(max_length=3, choices=research_group_choices)
-    specialized_field = models.IntegerField(default=0, choices=event_specialized_field_choices)
-    file = models.FileField(null=True)
+    research_group = MultiSelectField(max_length=32, choices=research_group_choices)
+    specialized_field = models.IntegerField(default=0, choices=specialized_field_choices)
+    file = models.FileField()
 
     type = models.IntegerField(default=0, choices=event_type_choices)
 
-    instructor = models.CharField(max_length=256, null=True)
+    instructor = models.CharField(max_length=256, null=True , blank=True)
 
-    speaker = models.CharField(max_length=256, null=True)
-    scientific_director = models.CharField(max_length=256, null=True)
-    executive_director = models.CharField(max_length=256, null=True)
+    speaker = models.CharField(max_length=256, null=True , blank=True)
+    scientific_director = models.CharField(max_length=256, null=True , blank=True)
+    executive_director = models.CharField(max_length=256, null=True , blank=True)
+    created_on = models.DateTimeField(auto_now_add=True )
 
     def to_dict(self):
         return {
@@ -106,14 +120,17 @@ class Event(models.Model, Dictable):
             "scientific_director": self.scientific_director,
             "executive_director": self.executive_director,
             "speaker": self.speaker,
-            # "file": self.file.url,
+            "file": self.file.url,
+            "type": self.type,
+            "created_on": self.created_on,
+            "id": self.id,
         }
 
     @staticmethod
     def get_event_list(search_query=None):
         if search_query is None:
             return [event for event in Event.objects.all()]
-        return [event for event in Event.objects.filter(title__contains=search_query)]
+        return [event for event in Event.objects.filter(title__icontains=search_query)]
 
     @staticmethod
     def get_event_by_id(id):
@@ -125,12 +142,8 @@ class Contract(models.Model, Dictable):
     start_date = models.DateField()
     end_date = models.DateField()
     manager = models.CharField(max_length=256, null=False)
-    amount = models.IntegerField()
+    amount = models.PositiveBigIntegerField()
     cooperators = models.CharField(max_length=256)
-    document1 = models.FileField(null=True)
-    document2 = models.FileField(null=True)
-    document3 = models.FileField(null=True)
-    document4 = models.FileField(null=True)
 
     def to_dict(self):
         return {
@@ -140,10 +153,7 @@ class Contract(models.Model, Dictable):
             "manager": self.manager,
             "amount": self.amount,
             "cooperators": self.cooperators,
-            "document1": self.document1,
-            "document2": self.document2,
-            "document3": self.document3,
-            "document4": self.document4,
+            "id": self.id,
         }
 
     @staticmethod
@@ -170,6 +180,7 @@ class Plan(models.Model, Dictable):
     cooperators = models.CharField(max_length=512)
     specialized_field = models.IntegerField(default=0, choices=specialized_field_choices)
     research_group = MultiSelectField(max_length=32, choices=research_group_choices)
+    created_on = models.DateTimeField(auto_now_add=True)
 
     def to_dict(self):
         return {
@@ -183,6 +194,7 @@ class Plan(models.Model, Dictable):
             "cooperators": self.cooperators,
             "specialized_field": self.specialized_field,
             "research_group": self.research_group,
+            "created_on": self.created_on,
         }
 
     @staticmethod
@@ -222,7 +234,7 @@ class PlanApplication(models.Model, Dictable):
     income = models.PositiveBigIntegerField()
     total_income = models.PositiveBigIntegerField()
     total_cost = models.PositiveBigIntegerField()
-    plan = models.OneToOneField(Plan, related_name='application')
+    plan = models.OneToOneField(Plan,on_delete=models.CASCADE ,related_name='application')
 
     def to_dict(self):
         return {
