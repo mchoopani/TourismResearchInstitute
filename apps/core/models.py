@@ -195,6 +195,8 @@ class Plan(models.Model, Dictable):
             "specialized_field": self.specialized_field,
             "research_group": self.research_group,
             "created_on": self.created_on,
+            "id": self.id,
+
         }
 
     @staticmethod
@@ -222,7 +224,9 @@ class Document(models.Model, Dictable):
     def to_dict(self):
         return {
             "title": self.title,
-            "file": self.file.url
+            "file": self.file.url,
+            "id": self.id
+
         }
 
     @staticmethod
@@ -251,11 +255,15 @@ class CostTopic(models.Model, Dictable):
     title = models.CharField(max_length=256, null=False)
     amount = models.PositiveBigIntegerField()
     plan_application = models.ForeignKey(PlanApplication, on_delete=models.CASCADE)
+    created_on = models.DateTimeField(auto_now_add=True)
+
 
     def to_dict(self):
         return {
             "title": self.title,
             "amount": self.amount,
+            "created_on": self.created_on,
+            "id": self.id
         }
 
     def get_section_set(self):
@@ -270,13 +278,20 @@ class CostSection(models.Model):
     amount = models.PositiveBigIntegerField()
     description = models.TextField(max_length=1024)
     topic = models.ForeignKey(CostTopic, on_delete=models.CASCADE)
+    created_on = models.DateTimeField(auto_now_add=True)
+
 
     def to_dict(self):
         return {
             "title": self.title,
             "amount": self.amount,
             "description": self.description,
+            "created_on": self.created_on,
+            "id": self.id
+
         }
     @staticmethod
     def get_section_by_id(id):
         return CostSection.objects.get(id=id)
+
+

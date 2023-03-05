@@ -34,7 +34,9 @@ class PlanView(views.View):
             )
 
     def post(self, request):
-        data = json.loads(request.body.decode('utf-8'))
+        #data = json.loads(request.body.decode('utf-8'))
+        data = request.POST
+
         form = PlanForm(data)
         if form.is_valid():
             form.save()
@@ -51,7 +53,8 @@ class PlanView(views.View):
     def put(self, request, plan_id):
         try:
             plan = Plan.get_plan_by_id(id=plan_id)
-            data = json.loads(request.body.decode('utf-8'))
+            #data = json.loads(request.body.decode('utf-8'))
+            data = request.POST
             form = PlanForm(data, instance=plan)
             if form.is_valid():
                 form.save()
@@ -83,8 +86,11 @@ class PlanView(views.View):
 class DocumentView(views.View):
     def get(self, request, plan_id, document_id=None):
         if document_id is None:
-            plan = Plan.get_plan_by_id(plan_id)
-            document_list = plan.get_document_set()
+            try:
+                plan = Plan.get_plan_by_id(plan_id)
+                document_list = plan.get_document_set()
+            except Plan.DoesNotExist:
+                return JsonResponse(data={}, status=http.HTTPStatus.NOT_FOUND)
             return JsonResponse(
                 data=Utils.serialize_array(document_list),
                 status=http.HTTPStatus.OK,
@@ -93,18 +99,25 @@ class DocumentView(views.View):
         else:
             try:
                 document = Document.get_document_by_id(id=document_id)
-            except Plan.DoesNotExist:
+            except Document.DoesNotExist:
                 return JsonResponse(data={}, status=http.HTTPStatus.NOT_FOUND)
             return JsonResponse(
                 data=document.to_dict(),
                 status=http.HTTPStatus.OK
             )
 
-    def post(self, request):
-        data = json.loads(request.body.decode('utf-8'))
-        form = DocumentForm(data)
+    def post(self, request,plan_id):
+        #data = json.loads(request.body.decode('utf-8'))
+        data = request.POST
+        form = DocumentForm(data , request.FILES)
         if form.is_valid():
-            form.save()
+            new_doc = form.save(commit = False)
+            try:
+                plan = Plan.get_plan_by_id(plan_id)
+            except Plan.DoesNotExist:
+                return JsonResponse(data={}, status=http.HTTPStatus.NOT_FOUND)
+            new_doc.plan = plan
+            new_doc.save()
             return JsonResponse(
                 data={},
                 status=http.HTTPStatus.CREATED
@@ -115,11 +128,12 @@ class DocumentView(views.View):
                 status=http.HTTPStatus.BAD_REQUEST
             )
 
-    def put(self, request, document_id):
+    def put(self, request, document_id,plan_id):
         try:
             document = Document.get_document_by_id(id=document_id)
-            data = json.loads(request.body.decode('utf-8'))
-            form = DocumentForm(data, instance=document)
+            #data = json.loads(request.body.decode('utf-8'))
+            data = request.POST
+            form = DocumentForm(data,request.FILES, instance=document)
             if form.is_valid():
                 form.save()
                 return JsonResponse(
@@ -135,7 +149,7 @@ class DocumentView(views.View):
         except Document.DoesNotExist:
             return JsonResponse(data={}, status=http.HTTPStatus.NOT_FOUND)
 
-    def delete(self, request, document_id):
+    def delete(self, request, document_id,plan_id):
         try:
             document = Document.get_document_by_id(id=document_id)
         except Document.DoesNotExist:
@@ -545,3 +559,5 @@ class EventView(views.View):
             data={},
             status=http.HTTPStatus.OK
         )
+
+class UploadDocumentView(views.View):

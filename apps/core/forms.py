@@ -35,7 +35,7 @@ class PlanForm(forms.ModelForm):
 class DocumentForm(forms.ModelForm):
     class Meta:
         model = Document
-        fields = "__all__"
+        fields = ("title","file")
 
 
 class PlanApplicationForm(forms.ModelForm):
