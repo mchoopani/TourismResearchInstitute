@@ -1,0 +1,62 @@
+<div id="sidebar" class="shadow d-flex flex-column">
+    <div class="d-flex justify-content-between px-1">
+        <p>14:00</p>
+        <p>پنجشنبه</p>
+        <p>1399/12/12</p>
+    </div>
+
+    <p class="mt-5 mb-5 text-center">
+        مسعود صمیمی عزیز<br>خوش آمدید
+    </p>
+
+    <div class="mt-5 w-100">
+        <div class="accordion accordion-flush d-flex flex-column mx-3" id="accordionFlushExample">
+
+
+            <div class="accordion-item border-0">
+                <p class="accordion-header title d-flex justify-content-between align-items-center px-3 pt-2 rounded-top" id="flush-headingOne">
+                  <button class="btn collapsed p-0 accordian-btn" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" >
+                  </button>
+                  این تست
+                </p>
+
+                <div id="flush-collapseOne" class="accordion-collapse collapse rounded-bottom" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
+                  <div class="accordion-body">
+                      aceholder content for this accordion, which is intended to demonstrate the <code>.accordion-flush</code> class. This is the first item's accordion body.
+                  </div>
+                </div>
+            </div>
+
+            <div class="accordion-item border-0">
+                <p class="accordion-header title d-flex justify-content-between align-items-center px-3 p-2 rounded-top" id="flush-headingTwo">
+                  <button class="btn collapsed p-0 accordian-btn" data-bs-toggle="collapse" data-bs-target="#flush-collapseTwo" >
+                  </button>
+                  این تست
+                </p>
+
+                <div id="flush-collapseTwo" class="accordion-collapse collapse rounded-bottom" aria-labelledby="flush-headingTwo" data-bs-parent="#accordionFlushExample">
+                  <div class="accordion-body">
+                      aceholder content for this accordion, which is intended to demonstrate the <code>.accordion-flush</code> class. This is the first item's accordion body.
+                  </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+{% block scrpit %}
+    <script>
+        $(document).ready(function() {
+          $('.collapsed').click(function() {
+            var isExpanded = $(this).attr('aria-expanded') === 'true';
+            if (isExpanded) {
+              $('.title').css('background-color', '#CCE1E3');
+            } else {
+              $('.title').css('background-color', '#ffffff');
+            }
+          });
+        });
+
+    </script>
+{% endblock %}

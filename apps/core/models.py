@@ -239,7 +239,7 @@ class PlanApplication(models.Model, Dictable):
     total_income = models.PositiveBigIntegerField()
     total_cost = models.PositiveBigIntegerField()
     plan = models.OneToOneField(Plan,on_delete=models.CASCADE ,related_name='application')
-
+    
     def to_dict(self):
         return {
             "income": self.income,

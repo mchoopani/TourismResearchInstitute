@@ -1,0 +1,76 @@
+@font-face {
+    font-family: 'Anjoman';
+    src: url('./font/Anjoman_Regular.ttf');
+}
+
+body{
+    font-family: 'Anjoman', sans-serif;
+}
+table {
+    background-color: #FFF;
+}
+
+tr:hover {
+    background-color: #FFFAEE;
+}
+
+#navbar {
+    background-color: #084C61;
+}
+
+#container {
+    background-color: #F3F4F5;
+}
+
+#sidebar {
+    background-color: #FFFFFF;
+}
+
+/* collapse show */
+#sidebar .collapse.show {
+    background-color: #CCE1E3;
+}
+
+#sidebar .btn:not(.collapsed) {
+    background-color: #CCE1E3;
+}
+
+#sidebar .accordian-btn::after {
+  content: "\25BC"; /* use a plus sign as the button icon */
+  font-size: 1rem;
+  transition: all 0.2s ease-in-out; /* add a smooth transition effect */
+}
+
+#sidebar .accordian-btn[aria-expanded="true"] {
+  transform: rotate(180deg); /* rotate the icon 180 degrees when the Accordion is expanded */
+}
+
+.btn-accept {
+    background-color: #FFC857;
+    color: #000;
+    text-align: center;
+    border-radius: 5px;
+    border: none;
+    padding: 5px 10px;
+    font-size: 12px;
+    box-shadow: 1px 1px rgba(0, 0, 0, 0.06);
+}
+
+.btn-accept:hover {
+    background-color: #f1b91f;
+}
+
+.btn-cancel {
+    background-color: #DB3A34;
+    color: #FFF;
+    text-align: center;
+    border-radius: 5px;
+    border: none;
+    padding: 5px 20px;
+    font-size: 12px;
+    box-shadow: 1px 1px rgba(0, 0, 0, 0.06);
+}
+
+.btn-cancel:hover {
+    background-color: #cc2e26;
+}
