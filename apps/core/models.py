@@ -222,7 +222,7 @@ class PlanApplication(models.Model, Dictable):
     income = models.PositiveBigIntegerField()
     total_income = models.PositiveBigIntegerField()
     total_cost = models.PositiveBigIntegerField()
-    plan = models.OneToOneField(Plan, related_name='application')
+    plan = models.OneToOneField(Plan, related_name='application', on_delete=models.CASCADE)
 
     def to_dict(self):
         return {
