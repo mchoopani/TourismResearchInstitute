@@ -10,19 +10,32 @@
     </p>
 
     <div class="mt-5 w-100">
-        <div class="accordion accordion-flush d-flex flex-column mx-3" id="accordionFlushExample">
+        <div class="accordion accordion-flush d-flex flex-column gap-1 mx-3" id="myAccordion">
 
+            <div class="accordion-item border-0">
+                <p class="accordion-header rounded-top" id="flush-headingZero">
+                    <a class="btn w-100 text-end collapsed" data-bs-toggle="collapse" data-bs-target="#flush-collapseZero">
+                        پیشخوان
+                    </a>
+                </p>
+
+                <div id="flush-collapseZero" class="accordion-collapse collapse rounded-bottom" aria-labelledby="flush-headingZero" data-bs-parent="#myAccordion">
+                </div>
+            </div>
 
             <div class="accordion-item border-0">
                 <p class="accordion-header title d-flex justify-content-between align-items-center px-3 pt-2 rounded-top" id="flush-headingOne">
                   <button class="btn collapsed p-0 accordian-btn" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" >
                   </button>
-                  این تست
+                  طرح های پژوهشی
                 </p>
 
-                <div id="flush-collapseOne" class="accordion-collapse collapse rounded-bottom" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
+                <div id="flush-collapseOne" class="accordion-collapse collapse rounded-bottom" aria-labelledby="flush-headingOne" data-bs-parent="#myAccordion">
                   <div class="accordion-body">
-                      aceholder content for this accordion, which is intended to demonstrate the <code>.accordion-flush</code> class. This is the first item's accordion body.
+                      <div class="d-flex gap-1 flex-column align-items-end">
+                          <a href="#" class="active">مشاهده همه</a>
+                          <a href="#" class="">افزودن طرح پژوهشی</a>
+                      </div>
                   </div>
                 </div>
             </div>
@@ -31,32 +44,115 @@
                 <p class="accordion-header title d-flex justify-content-between align-items-center px-3 p-2 rounded-top" id="flush-headingTwo">
                   <button class="btn collapsed p-0 accordian-btn" data-bs-toggle="collapse" data-bs-target="#flush-collapseTwo" >
                   </button>
-                  این تست
+                  مقاله ها
                 </p>
 
-                <div id="flush-collapseTwo" class="accordion-collapse collapse rounded-bottom" aria-labelledby="flush-headingTwo" data-bs-parent="#accordionFlushExample">
+                <div id="flush-collapseTwo" class="accordion-collapse collapse rounded-bottom" aria-labelledby="flush-headingTwo" data-bs-parent="#myAccordion">
                   <div class="accordion-body">
-                      aceholder content for this accordion, which is intended to demonstrate the <code>.accordion-flush</code> class. This is the first item's accordion body.
+                      <div class="d-flex gap-1 flex-column align-items-end">
+                          <a href="#" class="active">مشاهده همه</a>
+                          <a href="#" class="">افزودن مقاله</a>
+                      </div>
                   </div>
+                </div>
+            </div>
+
+            <div class="accordion-item border-0">
+                <p class="accordion-header title d-flex justify-content-between align-items-center px-3 p-2 rounded-top" id="flush-headingThree">
+                  <button class="btn collapsed p-0 accordian-btn" data-bs-toggle="collapse" data-bs-target="#flush-collapseThree" >
+                  </button>
+                  نشست ها و کارگاه ها
+                </p>
+
+                <div id="flush-collapseThree" class="accordion-collapse collapse rounded-bottom" aria-labelledby="flush-headingThree" data-bs-parent="#myAccordion">
+                  <div class="accordion-body">
+                      <div class="d-flex gap-1 flex-column align-items-end">
+                          <a href="#" class="active">مشاهده همه</a>
+                          <a href="#" class="">افزودن نشست ها و کارگاه</a>
+                      </div>
+                  </div>
+                </div>
+            </div>
+
+            <div class="accordion-item border-0">
+                <p class="accordion-header title d-flex justify-content-between align-items-center px-3 p-2 rounded-top" id="flush-headingFour">
+                  <button class="btn collapsed p-0 accordian-btn" data-bs-toggle="collapse" data-bs-target="#flush-collapseFour" >
+                  </button>
+                  کتاب ها
+                </p>
+
+                <div id="flush-collapseFour" class="accordion-collapse collapse rounded-bottom" aria-labelledby="flush-headingFour" data-bs-parent="#myAccordion">
+                  <div class="accordion-body">
+                      <div class="d-flex gap-1 flex-column align-items-end">
+                          <a href="#" class="active">مشاهده همه</a>
+                          <a href="#" class="">افزودن کتاب</a>
+                      </div>
+                  </div>
+                </div>
+            </div>
+
+            <div class="accordion-item border-0">
+                <p class="accordion-header title d-flex justify-content-between align-items-center px-3 p-2 rounded-top" id="flush-headingFive">
+                  <button class="btn collapsed p-0 accordian-btn" data-bs-toggle="collapse" data-bs-target="#flush-collapseFive" >
+                  </button>
+                  قرارداد مرکز
+                </p>
+
+                <div id="flush-collapseFive" class="accordion-collapse collapse rounded-bottom" aria-labelledby="flush-headingFive" data-bs-parent="#myAccordion">
+                  <div class="accordion-body">
+                      <div class="d-flex gap-1 flex-column align-items-end">
+                          <a href="#" class="active">مشاهده همه</a>
+                          <a href="#" class="">افزودن قرارداد مرکز</a>
+                      </div>
+                  </div>
+                </div>
+            </div>
+
+            <div class="accordion-item border-0">
+                <p class="accordion-header rounded-top" id="flush-headingSix">
+                    <a class="btn w-100 text-end collapsed" data-bs-toggle="collapse" data-bs-target="#flush-collapseSix">
+                        گزارشات مدیریتی
+                    </a>
+                </p>
+
+                <div id="flush-collapseSix" class="accordion-collapse collapse rounded-bottom" aria-labelledby="flush-headingSix" data-bs-parent="#myAccordion">
+                </div>
+            </div>
+
+            <div class="accordion-item border-0">
+                <p class="accordion-header rounded-top" id="flush-headingSeven">
+                    <a class="btn w-100 text-end collapsed" data-bs-toggle="collapse" data-bs-target="#flush-collapseSeven">
+                        حساب های غیر عملیاتی
+                    </a>
+                </p>
+
+                <div id="flush-collapseSeven" class="accordion-collapse collapse rounded-bottom" aria-labelledby="flush-headingSeven" data-bs-parent="#myAccordion">
+                </div>
+            </div>
+
+            <div class="accordion-item border-0">
+                <p class="accordion-header rounded-top" id="flush-headingEight">
+                    <a class="btn w-100 text-end collapsed" data-bs-toggle="collapse" data-bs-target="#flush-collapseEight">
+                        حسابداری پژوهشکده
+                    </a>
+                </p>
+
+                <div id="flush-collapseEight" class="accordion-collapse collapse rounded-bottom" aria-labelledby="flush-headingEight" data-bs-parent="#myAccordion">
                 </div>
             </div>
 
         </div>
     </div>
-</div>
 
 {% block scrpit %}
     <script>
-        $(document).ready(function() {
-          $('.collapsed').click(function() {
-            var isExpanded = $(this).attr('aria-expanded') === 'true';
-            if (isExpanded) {
-              $('.title').css('background-color', '#CCE1E3');
-            } else {
-              $('.title').css('background-color', '#ffffff');
-            }
+        var myAccordion = document.getElementById('myAccordion');
+          myAccordion.addEventListener('show.bs.collapse', function (event) {
+              event.target.parentElement.children[0].style.backgroundColor = "#CCE1E3"
           });
-        });
 
+            myAccordion.addEventListener('hide.bs.collapse', function (event) {
+                event.target.parentElement.children[0].style.backgroundColor = "transparent"
+            });
     </script>
 {% endblock %}

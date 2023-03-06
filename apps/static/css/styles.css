@@ -45,6 +45,16 @@ tr:hover {
   transform: rotate(180deg); /* rotate the icon 180 degrees when the Accordion is expanded */
 }
 
+#sidebar a {
+    color: #000;
+    text-decoration: none;
+    font-size: 13px;
+}
+
+#sidebar a.active {
+    color: #177E89;
+}
+
 .btn-accept {
     background-color: #FFC857;
     color: #000;
