@@ -17,14 +17,14 @@
     {% endblock %}
 </head>
 <body>
-    <div id="container" class="d-flex h-100">
+    <div id="container" class="d-flex vh-100">
         <!-- body -->
         <div class="col-md-10">
-            <div class="d-flex flex-column h-100">
+            <div class="d-flex flex-column">
                 <!-- navbar     -->
                 {% include 'includes/navbar.html' %}
                 <!-- content -->
-                <div class="flex-grow-1">
+                <div id="content" class="">
                     {% block content %}
                     {% endblock %}
                 </div>

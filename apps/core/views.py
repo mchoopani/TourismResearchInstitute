@@ -561,3 +561,4 @@ class EventView(views.View):
         )
 
 class UploadDocumentView(views.View):
+    pass
