@@ -18,10 +18,11 @@ class PlanView(views.View):
         if plan_id is None:
             search_query = request.GET.get('q', None)
             plan_list = Plan.get_plan_list(search_query)
-            return JsonResponse(
-                data=Utils.serialize_array(plan_list),
+            return render(
+                request,
+                "plan.html",
+                context= {'data': Utils.serialize_array(plan_list)},
                 status=http.HTTPStatus.OK,
-                safe=False
             )
         else:
             try:
