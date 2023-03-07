@@ -1,8 +1,7 @@
 from django.urls import path
 from django.views.decorators.csrf import csrf_exempt
 
-from .views import BookView, Home,PaperView , EventView , DocumentView , PlanView , ApplicationView , TopicView , CostSectionView
-
+from .views import BookView, Home,PaperView , EventView , DocumentView , PlanView , ApplicationView , TopicView , CostSectionView , AddplanView
 
 urlpatterns = [
     path('books/<int:book_id>', csrf_exempt(BookView.as_view())),
@@ -28,6 +27,7 @@ urlpatterns = [
     path('plans/<int:plan_id>/', csrf_exempt(PlanView.as_view())),
     path('plans/', csrf_exempt(PlanView.as_view())),
 
+    path('addplan/', csrf_exempt(AddplanView.as_view())),
 
     path('', csrf_exempt(Home.as_view()))
 ]

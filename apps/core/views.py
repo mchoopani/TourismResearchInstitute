@@ -13,6 +13,28 @@ from django.shortcuts import render
 from .serializers import Utils
 
 
+class AddplanView(views.View):
+    def get(self, request):
+        form = PlanForm()
+        return render(request, 'add-plan.html', {'form': form})
+
+    def post(self, request):
+        # data = json.loads(request.body.decode('utf-8'))
+        data = request.POST
+        form = PlanForm(data)
+        if form.is_valid():
+            form.save()
+            return JsonResponse(
+                data={},
+                status=http.HTTPStatus.CREATED
+            )
+        else:
+            return JsonResponse(
+                data=form.errors,
+                status=http.HTTPStatus.BAD_REQUEST
+            )
+
+
 class PlanView(views.View):
     def get(self, request, plan_id=None):
         if plan_id is None:
@@ -21,7 +43,7 @@ class PlanView(views.View):
             return render(
                 request,
                 "plan.html",
-                context= {'data': Utils.serialize_array(plan_list)},
+                context={'data': Utils.serialize_array(plan_list)},
                 status=http.HTTPStatus.OK,
             )
         else:
@@ -35,7 +57,7 @@ class PlanView(views.View):
             )
 
     def post(self, request):
-        #data = json.loads(request.body.decode('utf-8'))
+        # data = json.loads(request.body.decode('utf-8'))
         data = request.POST
 
         form = PlanForm(data)
@@ -54,7 +76,7 @@ class PlanView(views.View):
     def put(self, request, plan_id):
         try:
             plan = Plan.get_plan_by_id(id=plan_id)
-            #data = json.loads(request.body.decode('utf-8'))
+            # data = json.loads(request.body.decode('utf-8'))
             data = request.POST
             form = PlanForm(data, instance=plan)
             if form.is_valid():
@@ -107,12 +129,12 @@ class DocumentView(views.View):
                 status=http.HTTPStatus.OK
             )
 
-    def post(self, request,plan_id):
-        #data = json.loads(request.body.decode('utf-8'))
+    def post(self, request, plan_id):
+        # data = json.loads(request.body.decode('utf-8'))
         data = request.POST
-        form = DocumentForm(data , request.FILES)
+        form = DocumentForm(data, request.FILES)
         if form.is_valid():
-            new_doc = form.save(commit = False)
+            new_doc = form.save(commit=False)
             try:
                 plan = Plan.get_plan_by_id(plan_id)
             except Plan.DoesNotExist:
@@ -129,12 +151,12 @@ class DocumentView(views.View):
                 status=http.HTTPStatus.BAD_REQUEST
             )
 
-    def put(self, request, document_id,plan_id):
+    def put(self, request, document_id, plan_id):
         try:
             document = Document.get_document_by_id(id=document_id)
-            #data = json.loads(request.body.decode('utf-8'))
+            # data = json.loads(request.body.decode('utf-8'))
             data = request.POST
-            form = DocumentForm(data,request.FILES, instance=document)
+            form = DocumentForm(data, request.FILES, instance=document)
             if form.is_valid():
                 form.save()
                 return JsonResponse(
@@ -150,7 +172,7 @@ class DocumentView(views.View):
         except Document.DoesNotExist:
             return JsonResponse(data={}, status=http.HTTPStatus.NOT_FOUND)
 
-    def delete(self, request, document_id,plan_id):
+    def delete(self, request, document_id, plan_id):
         try:
             document = Document.get_document_by_id(id=document_id)
         except Document.DoesNotExist:
@@ -208,9 +230,6 @@ class ApplicationView(views.View):
 
         except PlanApplication.DoesNotExist:
             return JsonResponse(data={}, status=http.HTTPStatus.NOT_FOUND)
-
-
-
 
 
 class CostSectionView(views.View):
@@ -376,9 +395,9 @@ class BookView(views.View):
             )
 
     def post(self, request):
-        #data = json.loads(request.body.decode('utf-8'))
+        # data = json.loads(request.body.decode('utf-8'))
         data = request.POST
-        form = BookForm(data , request.FILES)
+        form = BookForm(data, request.FILES)
         if form.is_valid():
             form.save()
             return JsonResponse(
@@ -394,7 +413,7 @@ class BookView(views.View):
     def put(self, request, book_id):
         try:
             book = Book.get_book_by_id(id=book_id)
-            #data = json.loads(request.body.decode('utf-8'))
+            # data = json.loads(request.body.decode('utf-8'))
             data = request.POST
             form = BookForm(data, instance=book)
             if form.is_valid():
@@ -445,7 +464,7 @@ class PaperView(views.View):
             )
 
     def post(self, request):
-        #data = json.loads(request.body.decode('utf-8'))
+        # data = json.loads(request.body.decode('utf-8'))
         data = request.POST
         form = PaperForm(data)
         if form.is_valid():
@@ -463,7 +482,7 @@ class PaperView(views.View):
     def put(self, request, paper_id):
         try:
             paper = Paper.get_paper_by_id(id=paper_id)
-            #data = json.loads(request.body.decode('utf-8'))
+            # data = json.loads(request.body.decode('utf-8'))
             data = request.POST
             form = PaperForm(data, instance=paper)
             if form.is_valid():
@@ -514,7 +533,7 @@ class EventView(views.View):
             )
 
     def post(self, request):
-        #data = json.loads(request.body.decode('utf-8'))
+        # data = json.loads(request.body.decode('utf-8'))
         data = request.POST
         form = EventForm(data)
         if form.is_valid():
@@ -532,7 +551,7 @@ class EventView(views.View):
     def put(self, request, event_id):
         try:
             event = Event.get_event_by_id(id=event_id)
-            #data = json.loads(request.body.decode('utf-8'))
+            # data = json.loads(request.body.decode('utf-8'))
             data = request.POST
             form = EventForm(data, instance=event)
             if form.is_valid():
@@ -560,6 +579,7 @@ class EventView(views.View):
             data={},
             status=http.HTTPStatus.OK
         )
+
 
 class UploadDocumentView(views.View):
     pass
